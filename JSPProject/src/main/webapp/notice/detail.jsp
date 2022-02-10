@@ -1,4 +1,5 @@
 
+<%@page import="java.util.Date"%>
 <%@page language="java" contentType="text/html; charset=utf-8"
 	pageEncoding="utf-8"%>
 <%@page import="java.sql.ResultSet"%>
@@ -7,6 +8,9 @@
 <%@page import="java.sql.DriverManager"%>
 
 <%
+
+int id = Integer.parseInt(request.getParameter("id"));
+
 String sql = "SELECT * FROM NOTICE WHERE ID = ?";
 String url = "jdbc:oracle:thin:@localhost:1521/xepdb1";
 String uid = "newlec";
@@ -14,7 +18,20 @@ String pwd = "nexon0918,";
 Class.forName("oracle.jdbc.driver.OracleDriver");
 Connection con = DriverManager.getConnection(url, uid, pwd);
 PreparedStatement st = con.prepareStatement(sql);
-ResultSet rs = st.executeQuery(sql);
+st.setInt(1,id);
+ResultSet rs = st.executeQuery();
+rs.next();
+
+String title =rs.getString("TITLE");
+String writer_id =rs.getString("WRITER_ID");
+Date regdate =rs.getDate("REGDATE");
+String hit =rs.getString("HIT") ;
+String files =rs.getString("FILES") ;
+String content =rs.getString("CONTENT") ;
+
+rs.close();
+st.close();
+con.close();
 %>
 
 <!DOCTYPE html>
@@ -163,46 +180,30 @@ ResultSet rs = st.executeQuery(sql);
 				<div class="margin-top first">
 					<h3 class="hidden">공지사항 내용</h3>
 					<table class="table">
-						<tbody>
+						<tbody>    
 							<tr>
 								<th>제목</th>
 								<td class="text-align-left text-indent text-strong text-orange"
-									colspan="3">스프링 8강까지의 예제 코드</td>
+									colspan="3"><%=title%></td>
 							</tr>
 							<tr>
 								<th>작성일</th>
-								<td class="text-align-left text-indent" colspan="3">2019-08-18
+								<td class="text-align-left text-indent" colspan="3"><%=regdate%>
 								</td>
 							</tr>
 							<tr>
 								<th>작성자</th>
-								<td>newlec</td>
+								<td><%=writer_id%></td>
 								<th>조회수</th>
-								<td>148</td>
+								<td><%=hit%></td>
 							</tr>
 							<tr>
-								<th>첨부파일</th>
+								<th><%=files%></th>
 								<td colspan="3"></td>
 							</tr>
 							<tr class="content">
-								<td colspan="4">안녕하세요. 뉴렉처입니다.
-									<div>
-										<br>
-									</div>
-									<div>현재 진행중인 스프링 DI 8강까지의 예제입니다.</div>
-									<div>
-										<br>
-									</div>
-									<div>
-										<a href="http://www.newlecture.com/resource/spring2.zip"><b><u><font
-													size="5" color="#dd8a00">예제 다운로드하기</font></u></b></a>
-									</div>
-									<div>
-										<br>
-									</div>
-									<div>
-										<br>
-									</div>
+								<td colspan="4">
+									<%=content %>
 								</td>
 							</tr>
 						</tbody>
@@ -210,7 +211,7 @@ ResultSet rs = st.executeQuery(sql);
 				</div>
 
 				<div class="margin-top text-align-center">
-					<a class="btn btn-list" href="list.html">목록</a>
+					<a class="btn btn-list" href="list.jsp">목록</a>
 				</div>
 
 				<div class="margin-top">
@@ -282,9 +283,3 @@ ResultSet rs = st.executeQuery(sql);
 </body>
 
 </html>
-
-<%
-rs.close();
-st.close();
-con.close();
-%>
