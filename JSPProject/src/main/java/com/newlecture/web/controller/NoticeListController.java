@@ -64,6 +64,6 @@ public class NoticeListController extends HttpServlet {
 		req.setAttribute("list", list);
 
 		// fowward : detail.jsp도 쓸 수 있게 req,resp 객체를 통해
-		req.getRequestDispatcher("/notice/list.jsp").forward(req, resp);
+		req.getRequestDispatcher("/WEB-INF/view/notice/list.jsp").forward(req, resp);
 	}
 }

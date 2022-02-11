@@ -60,7 +60,7 @@ public class NoticeDetailController extends HttpServlet {
 		}
 		
 		//fowward : detail.jsp도 쓸 수 있게 req,resp 객체를 통해 
-		req.getRequestDispatcher("/notice/detail.jsp").forward(req, resp);
+		req.getRequestDispatcher("/WEB-INF/view/notice/detail.jsp").forward(req, resp);
 		
 	}
 }	
