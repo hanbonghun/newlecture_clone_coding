@@ -1,38 +1,7 @@
 
-<%@page import="java.util.Date"%>
 <%@page language="java" contentType="text/html; charset=utf-8"
 	pageEncoding="utf-8"%>
-<%@page import="java.sql.ResultSet"%>
-<%@page import="java.sql.PreparedStatement"%>
-<%@page import="java.sql.Connection"%>
-<%@page import="java.sql.DriverManager"%>
 
-<%
-
-int id = Integer.parseInt(request.getParameter("id"));
-
-String sql = "SELECT * FROM NOTICE WHERE ID = ?";
-String url = "jdbc:oracle:thin:@localhost:1521/xepdb1";
-String uid = "newlec";
-String pwd = "nexon0918,";
-Class.forName("oracle.jdbc.driver.OracleDriver");
-Connection con = DriverManager.getConnection(url, uid, pwd);
-PreparedStatement st = con.prepareStatement(sql);
-st.setInt(1,id);
-ResultSet rs = st.executeQuery();
-rs.next();
-
-String title =rs.getString("TITLE");
-String writer_id =rs.getString("WRITER_ID");
-Date regdate =rs.getDate("REGDATE");
-String hit =rs.getString("HIT") ;
-String files =rs.getString("FILES") ;
-String content =rs.getString("CONTENT") ;
-
-rs.close();
-st.close();
-con.close();
-%>
 
 <!DOCTYPE html>
 <html>
@@ -184,26 +153,26 @@ con.close();
 							<tr>
 								<th>제목</th>
 								<td class="text-align-left text-indent text-strong text-orange"
-									colspan="3"><%=title%></td>
+									colspan="3">${n.title}</td>
 							</tr>
 							<tr>
 								<th>작성일</th>
-								<td class="text-align-left text-indent" colspan="3"><%=regdate%>
+								<td class="text-align-left text-indent" colspan="3">${n.regdate}
 								</td>
 							</tr>
 							<tr>
 								<th>작성자</th>
-								<td><%=writer_id%></td>
+								<td>${n.writer}</td>
 								<th>조회수</th>
-								<td><%=hit%></td>
+								<td>${n.hit}</td>
 							</tr>
 							<tr>
-								<th><%=files%></th>
+								<th>${n.files}</th>
 								<td colspan="3"></td>
 							</tr>
 							<tr class="content">
 								<td colspan="4">
-									<%=content %>
+									${n.content}
 								</td>
 							</tr>
 						</tbody>
