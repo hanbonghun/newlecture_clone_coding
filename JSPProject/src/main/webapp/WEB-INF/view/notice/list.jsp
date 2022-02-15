@@ -1,8 +1,6 @@
- <%@page import="com.newlecture.web.entitiy.Notice"%>
-<%@page import="java.util.List"%>
 <%@page language="java" contentType="text/html; charset=utf-8"
 	pageEncoding="utf-8"%>
-
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 
 <!DOCTYPE html>
 <html>
@@ -174,22 +172,22 @@
 							</tr>
 						</thead>
 						<tbody>
-						
-						<% 
-						List<Notice> list = (List<Notice>)request.getAttribute("list");
-						for (Notice notice : list) {
-							pageContext.setAttribute("n", notice);
-							%>
-							<tr>
-								<td>${n.id }</td>
-								<td class="title indent text-align-left"><a
-									href="detail?id=${n.id}">${n.title}
-								</a></td>
-								<td>${n.writer}></td>
-								<td>${n.regdate}</td>
-								<td>${n.hit}></td>
-							</tr>
- 					<% } %>
+
+
+
+							<c:forEach var="n" items="${list}">
+								<tr>
+									<td>${n.id}</td>
+									<td class="title indent text-align-left"><a
+										href="detail?id=${n.id}">${n.title}</a></td>
+									<td>${n.writer}</td>
+									<td>${n.regdate}</td>
+									<td>${n.hit }</td>
+								</tr>
+							</c:forEach>
+
+
+
 						</tbody>
 					</table>
 				</div>
@@ -267,4 +265,3 @@
 </body>
 
 </html>
-
