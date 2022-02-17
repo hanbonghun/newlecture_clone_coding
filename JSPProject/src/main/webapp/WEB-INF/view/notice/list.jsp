@@ -1,6 +1,7 @@
 <%@page language="java" contentType="text/html; charset=utf-8"
 	pageEncoding="utf-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 
 <!DOCTYPE html>
 <html>
@@ -151,7 +152,7 @@
 							<legend class="hidden">공지사항 검색 필드</legend>
 							<label class="hidden">검색분류</label> <select name="f">
 								<option value="title">제목</option>
-								<option value="writerId">작성자</option>
+								<option value="writer_id">작성자</option>
 							</select> <label class="hidden">검색어</label> <input type="text" name="q"
 								value="" /> <input class="btn btn-search" type="submit"
 								value="검색" />
@@ -181,8 +182,11 @@
 									<td class="title indent text-align-left"><a
 										href="detail?id=${n.id}">${n.title}</a></td>
 									<td>${n.writer}</td>
-									<td>${n.regdate}</td>
-									<td>${n.hit }</td>
+									<td><fmt:formatDate pattern="yyyy-MM-dd"
+											value="${n.regdate}" /></td>
+									<td><fmt:formatNumber type="number" maxFractionDigits="3"
+											value="${n.hit}" /></td>
+
 								</tr>
 							</c:forEach>
 
@@ -201,31 +205,32 @@
 
 				<div class="margin-top align-center pager">
 
-					<c:set var="page" value = "${(param.p==null)?1:param.p }"/>
-					<c:set var="startNum" value = "${page-(page-1)%5}"/>
-					<c:set var="lastNum" value = "23"/>
-					
+					<c:set var="page" value="${(param.p==null)?1:param.p }" />
+					<c:set var="startNum" value="${page-(page-1)%5}" />
+					<c:set var="lastNum" value="23" />
+
 					<div>
-					<c:if test="${startNum>1}">
-						<a href="?p=${startNum-1}&t=&q=" class = "btn btn-next">이전</a>
-					</c:if>	
-					<c:if test="${startNum<=1}">
-						<span class="btn btn-prev" onclick="alert('이전 페이지가 없습니다.');">이전</span>
-					</c:if>
+						<c:if test="${startNum>1}">
+							<a href="?p=${startNum-1}&t=&q=" class="btn btn-next">이전</a>
+						</c:if>
+						<c:if test="${startNum<=1}">
+							<span class="btn btn-prev" onclick="alert('이전 페이지가 없습니다.');">이전</span>
+						</c:if>
 					</div>
 					<ul class="-list- center">
-						<c:forEach var ="i" begin="0" end="4">
-							<li><a class="-text- orange bold" href="?p=${startNum+i}&t=&q=">${startNum+i}</a></li>
+						<c:forEach var="i" begin="0" end="4">
+							<li><a class="-text- orange bold"
+								href="?p=${startNum+i}&t=&q=">${startNum+i}</a></li>
 						</c:forEach>
 
 					</ul>
 					<div>
-					<c:if test="${startNum+5<lastNum}">
-						<a href="?p=${startNum+5}&t=&q=" class = "btn btn-next">다음</a>
-					</c:if>	
-					<c:if test="${startNum+5>=lastNum}">
-						<span class="btn btn-next" onclick="alert('다음 페이지가 없습니다.');">다음</span>
-					</c:if>	
+						<c:if test="${startNum+5<lastNum}">
+							<a href="?p=${startNum+5}&t=&q=" class="btn btn-next">다음</a>
+						</c:if>
+						<c:if test="${startNum+5>=lastNum}">
+							<span class="btn btn-next" onclick="alert('다음 페이지가 없습니다.');">다음</span>
+						</c:if>
 					</div>
 
 				</div>

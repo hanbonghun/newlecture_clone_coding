@@ -1,4 +1,5 @@
-
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %> 
 <%@page language="java" contentType="text/html; charset=utf-8"
 	pageEncoding="utf-8"%>
 
@@ -149,7 +150,7 @@
 				<div class="margin-top first">
 					<h3 class="hidden">공지사항 내용</h3>
 					<table class="table">
-						<tbody>    
+						<tbody>
 							<tr>
 								<th>제목</th>
 								<td class="text-align-left text-indent text-strong text-orange"
@@ -157,23 +158,31 @@
 							</tr>
 							<tr>
 								<th>작성일</th>
-								<td class="text-align-left text-indent" colspan="3">${n.regdate}
+								<td class="text-align-left text-indent" colspan="3">
+								<fmt:formatDate value="${n.regdate}" pattern="yyyy-MM-dd HH:mm:ss"/>
+								
 								</td>
 							</tr>
 							<tr>
 								<th>작성자</th>
 								<td>${n.writer}</td>
 								<th>조회수</th>
-								<td>${n.hit}</td>
+								<td><fmt:formatNumber type="number" maxFractionDigits="3" value="${n.hit}" /></td>
 							</tr>
 							<tr>
-								<th>${n.files}</th>
-								<td colspan="3"></td>
+								<th>첨부파일</th>
+								<td colspan="3" style="text-align:left; text-indent:10px;">								
+									<c:forTokens items="${n.files}"  delims="," var="item" varStatus="status">
+   										<a href="${item}"> ${item}</a>
+   										<c:if test="${not status.last}">
+   										/
+   										</c:if>
+									</c:forTokens>
+								</td>
 							</tr>
 							<tr class="content">
-								<td colspan="4">
-									${n.content}
-								</td>
+
+								<td colspan="4">${n.content}</td>
 							</tr>
 						</tbody>
 					</table>
