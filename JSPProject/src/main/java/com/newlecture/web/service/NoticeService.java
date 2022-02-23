@@ -10,25 +10,26 @@ import java.util.Date;
 import java.util.List;
 
 import com.newlecture.web.entitiy.Notice;
+import com.newlecture.web.entitiy.NoticeView;
 
 public class NoticeService {
 	
 	
-	public List<Notice> getNoticeList(){
+	public List<NoticeView> getNoticeList(){
 		return getNoticeList("title","",1); 
 	}
 	
-	public List<Notice> getNoticeList(int page){
+	public List<NoticeView> getNoticeList(int page){
 		return  getNoticeList("title","",page);  
 	}
 	
-	public List<Notice> getNoticeList(String field, String query,int page){
-		String sql = "SELECT *  FROM (SELECT ROWNUM RN,N.* FROM (SELECT * FROM NOTICE WHERE "+field+ " LIKE ? ORDER BY REGDATE DESC) N )  WHERE RN BETWEEN ? AND ?";
+	public List<NoticeView> getNoticeList(String field, String query,int page){
+		String sql = "SELECT *  FROM (SELECT ROWNUM RN,N.* FROM (SELECT * FROM NOTICE_VIEW WHERE "+field+ " LIKE ? ORDER BY REGDATE DESC) N )  WHERE RN BETWEEN ? AND ?";
 		String url = "jdbc:oracle:thin:@localhost:1521/xepdb1";
 		String uid = "newlec";
 		String pwd = "nexon0918,";
 		
-		List<Notice>list  = new ArrayList<>();
+		List<NoticeView>list  = new ArrayList<>();
 		try {
 			Class.forName("oracle.jdbc.driver.OracleDriver");
 			Connection con = DriverManager.getConnection(url, uid, pwd);
@@ -46,9 +47,8 @@ public class NoticeService {
 				Date regdate = rs.getDate("REGDATE");
 				String hit = rs.getString("HIT");
 				String files = rs.getString("FILES");
-				String content = rs.getString("CONTENT");
-
-				Notice notice = new Notice(id, title, writer_id, regdate, hit, files, content);
+				int cmtCount = rs.getInt("CMT");
+				NoticeView notice = new NoticeView(id, title, writer_id, regdate, hit, files, cmtCount);
 				list.add(notice);
 
 			}
@@ -85,7 +85,9 @@ public class NoticeService {
 			st.setString(1, "%"+query+"%");
 
 			ResultSet rs = st.executeQuery();
-			count= rs.getInt("COUNT");	 
+			
+			if(rs.next())
+				count= rs.getInt("COUNT");	 
 			
 			rs.close();
 			st.close();
