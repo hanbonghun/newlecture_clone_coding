@@ -9,6 +9,7 @@ public class Notice {
 	private Date regdate;
 	private String hit;
 	private String files;
+	private boolean pub;
 
 	public Notice() {
 	}
@@ -62,14 +63,14 @@ public class Notice {
 	@Override
 	public String toString() {
 		return "Notice [id=" + id + ", title=" + title + ", writer=" + writer + ", regdate=" + regdate + ", hit=" + hit
-				+ ", files=" + files + ", content=" + content + "]";
+				+ ", files=" + files + ", content=" + content + ", pub="+pub+ "]";
 	}
 
 	public void setContent(String content) {
 		this.content = content;
 	}
 
-	public Notice(int id,String title, String writer, Date regdate, String hit, String files, String content) {
+	public Notice(int id,String title, String writer, Date regdate, String hit, String files, String content, boolean pub) {
 		this.id = id;
 		this.title = title;
 		this.writer = writer;
@@ -77,6 +78,15 @@ public class Notice {
 		this.hit = hit;
 		this.files = files;
 		this.content = content;
+		this.pub = pub;
+	}
+
+	public boolean getPub() {
+		return pub;
+	}
+
+	public void setPub(boolean pub) {
+		this.pub = pub;
 	}
 
 	public int getId() {
