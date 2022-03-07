@@ -173,7 +173,7 @@
 								<th>첨부파일</th>
 								<td colspan="3" style="text-align:left; text-indent:10px;">								
 									<c:forTokens items="${n.files}"  delims="," var="item" varStatus="status">
-   										<a href="${item}"> ${item}</a>
+   										<a download href="/upload/${item}"> ${item}</a>
    										<c:if test="${not status.last}">
    										/
    										</c:if>
