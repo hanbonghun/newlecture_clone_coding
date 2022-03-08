@@ -1,6 +1,8 @@
 package com.newlecture.web.controller.admin.notice;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import javax.servlet.ServletException;
@@ -39,18 +41,28 @@ public class ListController extends HttpServlet {
 		String [] delIds =req.getParameterValues("del-id");
 		
 		String cmd = req.getParameter("cmd");
+		String _ids = req.getParameter("ids");
+		String[] ids = _ids.trim().split(" ");
+		NoticeService service = new NoticeService();
+
 		
 		switch(cmd) {
 		case "일괄공개":
-			for (String id : openIds) System.out.println(id);
+			List<String> oids = Arrays.asList(openIds);
+			List<String>cids = new ArrayList(Arrays.asList(ids));
+			cids.removeAll(oids);
+			service.pubNoticeAll(oids,cids);
 			break;
+			
+		//transaction 처리 : 업무 단위를 하나의 명령처럼 실행되게 함
+			
+			
 		case "일괄삭제":
-			NoticeService service = new NoticeService();
-			int[] ids = new int[delIds.length];
-			for (int i=0; i<delIds.length; i++) ids[i]= Integer.parseInt(delIds[i]);
-			int result = service.deleteNoticeAll(ids);
+			int[] ids1 = new int[delIds.length];
+			for (int i=0; i<delIds.length; i++) ids1[i]= Integer.parseInt(delIds[i]);
+			int result = service.deleteNoticeAll(ids1);
 			break;
 		}
-		
+		resp.sendRedirect("list");
 	}
 }

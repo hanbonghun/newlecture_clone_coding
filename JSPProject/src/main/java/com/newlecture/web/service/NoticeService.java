@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+
 import com.newlecture.web.entitiy.Notice;
 import com.newlecture.web.entitiy.NoticeView;
 
@@ -54,8 +55,60 @@ public class NoticeService {
 	
 	}
 	
-	public int pubNoticeAll(int ids) {
-		return 0; 
+	public int pubNoticeAll(int[] oids,int[] cids) {
+		List<String> oidsList = new ArrayList<>();
+		for(int i=0; i<oids.length; i++) {
+			oidsList.add(String.valueOf(oids[i]));
+		}
+		
+		List<String> cidsList = new ArrayList<>();
+		for(int i=0; i<cids.length; i++) {
+			cidsList.add(String.valueOf(cids[i]));
+		}
+		
+		return pubNoticeAll(oidsList,cidsList); 
+	}
+	
+	public int pubNoticeAll(List<String> oids,List<String> cids) {
+		String oidsCSV = String.join(",",oids);
+		String cidsCSV = String.join(",", cids);
+		return pubNoticeAll(oidsCSV, cidsCSV);
+	}
+	
+	// csv : comma separate value
+	public int pubNoticeAll(String oidsCSV,String cidsCSV) {
+		int result = 0 ;
+		String sqlOpen = String.format("UPDATE NOTICE SET PUB=1 WHERE ID IN (%s)", oidsCSV);
+		String sqlClose =  String.format("UPDATE NOTICE SET PUB=0 WHERE ID IN (%s)", cidsCSV);
+				
+		String url = "jdbc:oracle:thin:@localhost:1521/xepdb1";
+		String uid = "newlec";
+		String pwd = "nexon0918,";
+		
+		try {
+			Class.forName("oracle.jdbc.driver.OracleDriver");
+			Connection con = DriverManager.getConnection(url, uid, pwd);
+			Statement stOpen = con.createStatement();
+			result+= stOpen.executeUpdate(sqlOpen);
+			
+			Statement stClose = con.createStatement();
+			result+= stClose.executeUpdate(sqlClose);
+			
+
+	
+			stOpen.close();
+			stClose.close();
+			con.close();
+
+		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+				
+		return result;
 	}
 	
 	public int insertNotice(Notice notice) { //공지사항 입력 
